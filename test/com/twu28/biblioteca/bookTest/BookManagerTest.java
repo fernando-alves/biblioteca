@@ -1,9 +1,10 @@
 package com.twu28.biblioteca.bookTest;
 
 import com.twu28.biblioteca.book.Book;
-import com.twu28.biblioteca.book.stubs.BookManagerStub;
+import com.twu28.biblioteca.book.BookManager;
 import junit.framework.TestCase;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,13 +30,13 @@ public class BookManagerTest extends TestCase {
         testBooks.add(new Book("Test Book B"));
         testBooks.add(new Book("Test Book C"));
 
-        BookManagerStub bookManagerStub = BookManagerStub.build().withBooks(testBooks);
+        BookManager bookManager = new BookManager(testBooks);
 
-        assertEquals(testBooks, bookManagerStub.getBooks());
+        assertEquals(testBooks, bookManager.getBooks());
 
         testBooks.add(new Book("Test Book D"));
 
-        assertNotSame(testBooks, bookManagerStub);
+        assertNotSame(testBooks, bookManager);
 
     }
 
@@ -48,9 +49,9 @@ public class BookManagerTest extends TestCase {
         testBooks.add(new Book("Test Book B"));
         testBooks.add(new Book("Test Book C"));
 
-        BookManagerStub bookManagerStub = BookManagerStub.build().withBooks(testBooks);
-
-        assertTrue(bookManagerStub.isValidBookIndex(validIndex));
+        BookManager bookManager = new BookManager(testBooks);
+//
+        assertTrue(bookManager.isValidBookIndex(validIndex));
 
     }
 
@@ -63,13 +64,13 @@ public class BookManagerTest extends TestCase {
         testBooks.add(new Book("Test Book B"));
         testBooks.add(new Book("Test Book C"));
 
-        BookManagerStub bookManagerStub = BookManagerStub.build().withBooks(testBooks);
-
-        assertFalse(bookManagerStub.isValidBookIndex(invalidIndex));
-
+        BookManager bookManager = new BookManager(testBooks);
+//
+        assertFalse(bookManager.isValidBookIndex(invalidIndex));
+//
         int zeroIndex = 0;
         testBooks = new ArrayList<Book>();
-        BookManagerStub emptyBookManagerStub = BookManagerStub.build().withBooks(testBooks);
+        BookManager emptyBookManagerStub = new BookManager(testBooks);
         assertFalse(emptyBookManagerStub.isValidBookIndex(zeroIndex));
     }
 
@@ -81,24 +82,24 @@ public class BookManagerTest extends TestCase {
         testBooks.add(new Book("Test Book B"));
         testBooks.add(new Book("Test Book C"));
 
-        BookManagerStub bookManagerStub = BookManagerStub.build().withBooks(testBooks);
-
+        BookManager bookManagerStub = new BookManager(testBooks);
+//
         assertFalse(bookManagerStub.isValidBookIndex(invalidIndex));
 
     }
 
     //tests if a valid book reservation is successfully completed
-    public void testReserveBookSuccess(){
+    public void testReserveBookSuccess() throws FileNotFoundException {
         int bookIndex = 0;
-        BookManagerStub bookManagerStub = BookManagerStub.build();
-        boolean reservationSucceed = bookManagerStub.reserveBook(bookIndex);
+        BookManager bookManager = new BookManager();
+        boolean reservationSucceed = bookManager.reserveBook(bookIndex);
         assertTrue(reservationSucceed);
 
     }
 
     //tests if an invalid book reservation is not successfully completed
-    public void testReserveBookFail(){
-        BookManagerStub bookManagerStub = BookManagerStub.build();
+    public void testReserveBookFail() throws FileNotFoundException {
+        BookManager bookManagerStub = new BookManager();
         int bookIndex = 0;
         bookManagerStub.getBooks().get(bookIndex).reserve();
         boolean reservationSucceed = bookManagerStub.reserveBook(bookIndex);
@@ -112,13 +113,13 @@ public class BookManagerTest extends TestCase {
         testBooks.add(new Book("Test Book B"));
 
         int invalidBookIndex = 3;
-        BookManagerStub bookManagerStub = BookManagerStub.build().withBooks(testBooks);
+        BookManager bookManager = new BookManager(testBooks);
 
-        boolean reservationSucceed = bookManagerStub.reserveBook(invalidBookIndex);
+        boolean reservationSucceed = bookManager.reserveBook(invalidBookIndex);
         assertFalse(reservationSucceed);
 
         invalidBookIndex = -1;
-        reservationSucceed = bookManagerStub.reserveBook(invalidBookIndex);
+        reservationSucceed = bookManager.reserveBook(invalidBookIndex);
         assertFalse(reservationSucceed);
     }
 

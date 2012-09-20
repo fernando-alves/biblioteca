@@ -33,4 +33,24 @@ public class BookTest extends TestCase{
         assertTrue(book.getDetails().compareTo(defaultBookDetails) == 0);
     }
 
+    //tests the initial status of an item's reservation
+    //it should be available to be reserved
+    public void testReservedInitialValue(){
+
+        Book book = new Book("title");
+        assertFalse(book.isReserved());
+
+    }
+
+
+    //tests the reserve behavior of a book
+    //it should be reserved after a successfully reservation
+    public void testReserve(){
+
+        Book book = new Book("title");
+        book.reserve();
+        assertTrue(book.isReserved());
+
+    }
+
 }
