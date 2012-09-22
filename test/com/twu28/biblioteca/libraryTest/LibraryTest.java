@@ -1,71 +1,99 @@
 package com.twu28.biblioteca.libraryTest;
 
-import com.sun.servicetag.SystemEnvironment;
 import com.twu28.biblioteca.book.Book;
 import com.twu28.biblioteca.library.Library;
 import junit.framework.TestCase;
 
-import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class LibraryTest extends TestCase {
 
 
-    private OutputStream os;
-
     public LibraryTest(){
         super();
     }
 
-    protected void setUp(){
-        os = new ByteArrayOutputStream();
-        PrintStream ps = new PrintStream(os);
-        System.setOut(ps);
-    }
+    public void testLibraryBookList(){
+        List<Book> bookList = new ArrayList<Book>();
+        bookList.add(new Book("Book A",1));
+        bookList.add(new Book("Book B",2));
+        bookList.add(new Book("Book C",3));
 
-    public void testWelcomeMenu() throws FileNotFoundException {
+        Library library = new Library(bookList);
 
-        String exitOption = "2";
-        InputStream ip = new ByteArrayInputStream(exitOption.getBytes());
-        System.setIn(ip);
-
-        String welcomeMessage = "Welcome to Bangalore's Library";
-        String menuOptions = "Please, choose an option: "+System.lineSeparator() +
-                                    "1 - List books"+System.lineSeparator() +
-                                    "2 - Exit";
-
-        Library library = new Library();
-
-        library.run();
-
-        assertTrue(os.toString().contains(welcomeMessage));
-        assertTrue(os.toString().contains(menuOptions));
-    }
-
-    public void testBookListMenu(){
-
-        String listBooksOption = "1"+ System.lineSeparator()+"-1" +System.lineSeparator()+ "2";
-        InputStream ip = new ByteArrayInputStream(listBooksOption.getBytes());
-        System.setIn(ip);
-
-        Book dayTripper = new Book("DayTripper");
-        Book guinness = new Book("Guinness");
-
-        List<Book> books = new ArrayList<Book>();
-        books.add(dayTripper);
-        books.add(guinness);
-
-        Library library = new Library(books);
-
-        library.run();
-
-        assertTrue(os.toString().contains(dayTripper.getTitle()));
-        assertTrue(os.toString().contains(guinness.getTitle()));
-
+        for (Book book : bookList){
+            assertTrue(library.getBooks().contains(book));
+        }
 
     }
 
+    public void testDiferentBookList(){
+        List<Book> bookList = new ArrayList<Book>();
+        bookList.add(new Book("Book A",1));
+        bookList.add(new Book("Book B",2));
+        bookList.add(new Book("Book C",3));
+
+        Library library = new Library(bookList);
+
+        for (Book book : bookList){
+            assertTrue(library.getBooks().contains(book));
+        }
+
+        Book newBook = new Book("Book D", 4);
+        bookList.add(newBook);
+
+        assertFalse(library.getBooks().contains(newBook));
+
+    }
+
+
+    public void testSucessfullReservation(){
+        List<Book> bookList = new ArrayList<Book>();
+        Book bookA = new Book("Book A",1);
+        Book bookB = new Book("Book B",2);
+
+        bookList.add(bookA);
+        bookList.add(bookB);
+
+        Library library = new Library(bookList);
+
+        assertTrue(library.reserveBook(String.valueOf(bookA.getId())));
+        assertTrue(library.reserveBook(String.valueOf(bookB.getId())));
+    }
+
+    public void testUnsuccessfullyReservation(){
+        List<Book> bookList = new ArrayList<Book>();
+        Book bookA = new Book("Book A",1);
+        Book bookB = new Book("Book B",2);
+
+        assertTrue(bookA.reserve());
+        assertTrue(bookB.reserve());
+
+        bookList.add(bookA);
+        bookList.add(bookB);
+
+        Library library = new Library(bookList);
+
+        assertFalse(library.reserveBook(String.valueOf(bookA.getId())));
+        assertFalse(library.reserveBook(String.valueOf(bookB.getId())));
+
+    }
+
+    public void testReserveInvalidBook(){
+        List<Book> bookList = new ArrayList<Book>();
+        Book bookA = new Book("Book A",1);
+        Book bookB = new Book("Book B",2);
+
+        bookList.add(bookA);
+        bookList.add(bookB);
+
+        Library library = new Library(bookList);
+
+        Book invalidBook = new Book("Book C", 3);
+
+        assertFalse(library.reserveBook(String.valueOf(invalidBook.getId())));
+    }
 
 
 }

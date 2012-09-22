@@ -4,32 +4,43 @@ package com.twu28.biblioteca.book;
 public class Book{
 
     private String title;
-    private static String DEFAULT_BOOK_DETAILS = "Please talk to Librarian. Thank you.";
     private boolean isReserved;
+    private int id;
 
-    public Book (String title) {
-        setTitle(title);
+    public Book(String bookTitle, int bookId) {
+        setTitle(bookTitle);
+        setId(bookId);
         this.isReserved = false;
     }
 
-    public String getTitle(){
-        return this.title;
+    private void setId(int bookId) {
+        this.id = bookId;
     }
 
     private void setTitle(String title){
         this.title = title;
     }
 
-    public String getDetails(){
-        return DEFAULT_BOOK_DETAILS;
+    public String getTitle() {
+        return this.title;
     }
 
     public boolean isReserved() {
-        return isReserved;
+        return this.isReserved;
     }
 
-    public void reserve() {
-        this.isReserved = true;
+    public boolean reserve() {
+        if (isReserved){
+            return false;
+        }
+
+        isReserved = true;
+        return true;
     }
+
+    public int getId() {
+        return this.id;
+    }
+
 
 }
