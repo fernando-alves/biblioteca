@@ -3,6 +3,8 @@ package com.twu28.biblioteca.libraryTest.actions;
 import com.twu28.biblioteca.book.Book;
 import com.twu28.biblioteca.library.Library;
 import com.twu28.biblioteca.library.actions.ShowBookListAction;
+import com.twu28.biblioteca.movie.Movie;
+import com.twu28.biblioteca.user.User;
 import junit.framework.TestCase;
 
 import java.io.ByteArrayOutputStream;
@@ -32,7 +34,7 @@ public class ShowBookListActionTest extends TestCase{
         bookList.add(new Book("Book B",2));
         bookList.add(new Book("Book C",3));
 
-        Library library = new Library(bookList);
+        Library library = new Library(bookList, new ArrayList<Movie>(), new ArrayList<User>());
 
         ShowBookListAction showBookListAction = new ShowBookListAction(library);
         showBookListAction.execute(null, ps);
@@ -43,5 +45,6 @@ public class ShowBookListActionTest extends TestCase{
 
         assertTrue(os.toString().trim().compareTo(expectedBookList) == 0);
     }
+
 
 }

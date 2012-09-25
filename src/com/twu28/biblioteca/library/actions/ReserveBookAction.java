@@ -16,14 +16,17 @@ public class ReserveBookAction implements LibraryActionInterface {
 
     public void execute(InputStream input, PrintStream output) {
 
-        output.println("Please, type the book id:");
-        String scannerInput = new Scanner(input).next();
-        if (library.reserveBook(scannerInput)){
-            output.println("Thank You! Enjoy the book.");
+        if (library.hasUserLogged()){
+            output.println("Please, type the book id:");
+            String scannerInput = new Scanner(input).next();
+            if (library.reserveBook(scannerInput)){
+                output.println("Thank You! Enjoy the book.");
+            } else {
+                output.println("Sorry we don't have that book yet.");
+            }
         } else {
-            output.println("Sorry we don't have that book yet.");
+            output.println("You must be logged to do this!");
         }
 
     }
-
 }
